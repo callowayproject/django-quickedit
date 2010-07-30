@@ -1,9 +1,18 @@
+from django.conf import settings
+from django.db.models import get_model
 from django.contrib import admin
 from django.utils.functional import curry
 from django.forms.models import modelformset_factory, modelform_factory
 
 
-class QuickEditAdmin(admin.ModelAdmin):
+FIELDS = getattr(settings, 'QUICK_EDITABLE_FIELDS', {}).copy()
+for k,v in FIELDS.items():
+    if isinstance(k, basestring):
+        FIELDS[get_model(*k.split('.'))] = v
+        del FIELDS[k]
+
+
+class QuickEditAdmin(object):
     change_list_template = 'quickedit/change_list.html'
     
     def get_changelist_formset(self, request, **kwargs):
@@ -17,4 +26,9 @@ class QuickEditAdmin(admin.ModelAdmin):
         return modelformset_factory(self.model, modelform_factory(self.model),
                 extra=0, fields=self.quick_editable, **defaults)
 
-    
+for model,modeladmin in admin.site._registry.items():
+    if model in FIELDS:
+        admin.site.unregister(model)
+        admin.site.register(model, type('newadmin', (QuickEditAdmin, modeladmin.__class__), {
+            'quick_editable': FIELDS[model],
+        }))
