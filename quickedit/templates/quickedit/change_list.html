@@ -1,5 +1,5 @@
 {% extends "admin/change_list.html" %}
-{% load quickedit admin_list %}
+{% load quickedit admin_list adminmedia %}
 {% block extrastyle %}{{ block.super }}
 <style type="text/css" media="screen">
 	#changelist.filtered table.qe-table {
@@ -10,19 +10,28 @@
 		clear: left;
 		margin-right: 0 !important;
 	}
-	table.qe-table tr {
+	table.qe-table tr{
 		width: 100%;
-		border: 0;
 		float: left;
 	}
-	#changelist.filtered table.qe-table tr td {
+	#changelist.filtered table.qe-table tr td{
 		border: 0;
 	}
+        .helptext{
+            font-size: 10px !important;
+            color: #999;
+        }
 	.qe-table label {
 		width: 100px;
 		display: block;
 		float: left;
 	}
+        .qe-table td {
+            text-align: left;
+        }
+        .qe-table tr {
+            border-bottom: none;
+        }        
 	table.qe-table td.qe-long input[type="text"] {
 		width: 500px;
 	}
@@ -30,12 +39,18 @@
 		width: 500px;
 	}
 	.qe-button {
-		float:right;
 	}
 	div.qe-buttons {
 		display: block; 
-		float: left;
 	}
+        
+        .button, input[type=reset]{
+            background: white url({% admin_media_prefix %}img/admin/nav-bg.gif) bottom repeat-x;
+            padding: 3px 5px;
+            color: black;
+            border: 1px solid #bbb;
+            border-color: #ddd #aaa #aaa #ddd;
+        }
 </style>
 {% endblock %}
 
