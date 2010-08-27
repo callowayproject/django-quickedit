@@ -56,7 +56,7 @@ MEDIA_URL = ''
 # URL prefix for admin media -- CSS, JavaScript and images. Make sure to use a
 # trailing slash.
 # Examples: "http://foo.com/media/", "/media/".
-ADMIN_MEDIA_PREFIX = '/media/'
+ADMIN_MEDIA_PREFIX = '/media/admin/'
 
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '47*=9*s5ffdje8(im+g5037d9_yg0%ags%2kyn#rm0dbyi&rwn'
@@ -93,8 +93,17 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.comments',
     'quickedit',
+    #'django_extensions',
 )
 
 QUICK_EDITABLE_FIELDS = {
-    'comments.comment': ('ip_address',)
+    'comments.comment': ('ip_address','is_public','is_removed')
 }
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.request',
+)
