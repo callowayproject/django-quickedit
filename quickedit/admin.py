@@ -28,7 +28,8 @@ class QuickEditAdmin(object):
 
 for model,modeladmin in admin.site._registry.items():
     if model in FIELDS:
+        attrs = {'quick_editable': FIELDS[model]}
+        if not modeladmin.list_editable:
+            attrs.update(list_editable=(FIELDS[model][0],))
         admin.site.unregister(model)
-        admin.site.register(model, type('newadmin', (QuickEditAdmin, modeladmin.__class__), {
-            'quick_editable': FIELDS[model],
-        }))
+        admin.site.register(model, type('newadmin', (QuickEditAdmin, modeladmin.__class__), attrs))
