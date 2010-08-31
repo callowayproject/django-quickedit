@@ -16,7 +16,10 @@ def results(cl,r):
                 }
         else:
             for res, form in zip(cl.result_list, cl.formset.forms):
-                yield list(items_for_result(cl, res, form))
+                yield {
+                    'fields': list(items_for_result(cl, res, form)),
+                    'quickedit': None
+                }
     else:
         if qe:
             for res in cl.result_list:
@@ -26,10 +29,14 @@ def results(cl,r):
                 }
         else:
             for res in cl.result_list:
-                yield list(items_for_result(cl, res, None))
+                yield {
+                    'fields': list(items_for_result(cl, res, None)),
+                    'quickedit': None
+                }
 
 def qe_result_list(context, cl):
     return {
+        'qe_fields': cl.model_admin.quick_editable,
         'cl': cl,
         'result_headers': list(result_headers(cl)),
         'results': list(results(cl,context['request'])),

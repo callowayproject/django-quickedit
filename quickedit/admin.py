@@ -12,8 +12,9 @@ for k,v in FIELDS.items():
         del FIELDS[k]
 
 
-class QuickEditAdmin(object):
+class QuickEditAdmin(admin.ModelAdmin):
     change_list_template = 'quickedit/change_list.html'
+    quick_editable = ()
     
     def get_changelist_formset(self, request, **kwargs):
         """
@@ -24,12 +25,12 @@ class QuickEditAdmin(object):
         }
         defaults.update(kwargs)
         return modelformset_factory(self.model, modelform_factory(self.model),
-                extra=0, fields=self.quick_editable, **defaults)
-
+                extra=0,fields=self.quick_editable+self.list_editable, **defaults)
+        
 for model,modeladmin in admin.site._registry.items():
     if model in FIELDS:
         attrs = {'quick_editable': FIELDS[model]}
         if not modeladmin.list_editable:
             attrs.update(list_editable=(FIELDS[model][0],))
         admin.site.unregister(model)
-        admin.site.register(model, type('newadmin', (QuickEditAdmin, modeladmin.__class__), attrs))
+        admin.site.register(model, type('newadmin', (modeladmin.__class__, QuickEditAdmin), attrs))

@@ -24,7 +24,17 @@
 <tr class="quickedit-row" id="qe-form-{{ result.quickedit.instance.pk }}" style="display: None">
 	<td colspan="{{ result.fields|length }}" >
 		<table border="0" class="qe-table">
-		{{ result.quickedit.as_table }}
+			{% for field in result.quickedit %}
+				{% if field.name in qe_fields %}
+					<tr>
+						<td>{{ field.label_tag }}</td>
+						<td>{{ field }}
+						{% if field.errors %}{{ field.errors }}{% endif %}
+						{% if field.help_text %}<span class="help">{{ field.help_text }}</span>{% endif %}
+						</td>
+					</tr>
+				{% endif %}
+			{% endfor %}
 		<tr>
 			<td>
 				<input type="reset" value="Reset" class="qe-reset left" style="margin-right:10px;">
