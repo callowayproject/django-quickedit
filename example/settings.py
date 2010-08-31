@@ -92,12 +92,14 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.admin',
     'django.contrib.comments',
+    'app',
     'quickedit',
     #'django_extensions',
 )
 
 QUICK_EDITABLE_FIELDS = {
-    'comments.comment': ('ip_address','is_public','is_removed')
+    'comments.comment': ('ip_address','is_public','is_removed'),
+    'app.entry': ('title','tease',)
 }
 
 TEMPLATE_CONTEXT_PROCESSORS = (
